@@ -1,0 +1,5 @@
+package com.ottt.ottt.service.community;
+
+public interface CommunityService {
+
+}

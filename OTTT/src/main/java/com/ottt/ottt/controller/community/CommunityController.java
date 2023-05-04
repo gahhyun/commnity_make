@@ -1,0 +1,102 @@
+package com.ottt.ottt.controller.community;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.ottt.ottt.dto.ArticleDTO;
+import com.ottt.ottt.service.community.CommunityService;
+
+@Controller
+public class CommunityController {
+	
+	@Autowired
+	CommunityService communityService;
+	
+	
+	//freecommunity 메인
+	@GetMapping(value = "/community")
+	public String freecommunity(ArticleDTO articleDTO, Model m, HttpServletRequest request) {
+		
+		//if(!loginCheck(request))
+			//return "redirect:/login/login?toURL="+request.getRequestURL();		
+		
+	try {
+		List<ArticleDTO> list = communityService.showAllPage(articleDTO);
+		m.addAttribute("list", list);
+		
+	} catch (Exception e) {e.printStackTrace();}
+
+	return "/community/freecommunity/community_main";		
+	}
+	
+
+	//community 글 자세히보기
+	@GetMapping(value = "/community/post")
+	public String freecommunityPost(Integer article_no, Model m) {
+		
+		ArticleDTO articleDTO;
+		try {
+			articleDTO = communityService.read(article_no);
+			m.addAttribute("ArticleDTO", articleDTO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/community";
+			}
+
+			return "/community/freecommunity/community_post";		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	private boolean loginCheck(HttpServletRequest request) {
+		// 1. 세션을 얻어 (false는 session이 없어도 새로 생성하지 않음, 반환값은 null)
+		HttpSession session = request.getSession(false);
+		// 2. 세션에 id가 있는지 확인, 있으면 true를 반환 
+		return session != null && session.getAttribute("id")!=null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

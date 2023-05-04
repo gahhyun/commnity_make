@@ -1,0 +1,5 @@
+package com.ottt.ottt.dao.login;
+
+public interface FreeArticle {
+
+}
