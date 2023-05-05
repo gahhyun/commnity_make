@@ -5,36 +5,83 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.javassist.bytecode.AccessFlag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ottt.ottt.dao.login.LoginUserDao;
 import com.ottt.ottt.dto.ArticleDTO;
+import com.ottt.ottt.dto.UserDTO;
 import com.ottt.ottt.service.community.CommunityService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class CommunityController {
 	
 	@Autowired
 	CommunityService communityService;
+	@Autowired
+	LoginUserDao loginUserDao;
 	
 	
 	//freecommunity 메인
-	@GetMapping(value = "/community")
-	public String freecommunity(ArticleDTO articleDTO, Model m, HttpServletRequest request) {
+	@GetMapping("/community")
+	public String freecommunity(Model m, HttpServletRequest request, String toURL) {
 		
 		//if(!loginCheck(request))
 			//return "redirect:/login/login?toURL="+request.getRequestURL();		
 		
 	try {
-		List<ArticleDTO> list = communityService.showAllPage(articleDTO);
-		m.addAttribute("list", list);
+		 List<ArticleDTO> list = communityService.showAllPage();
+	        m.addAttribute("list", list);
+
+	        ArticleDTO articleDTO;
+	        UserDTO userDTO;
+
+	        for (ArticleDTO article : list) {
+	            articleDTO = article;
+	            userDTO = loginUserDao.selectNo(article.getUser_no());
+	            m.addAttribute("userDTO", userDTO);
+	        }
 		
 	} catch (Exception e) {e.printStackTrace();}
+	
+	
+	
 
 	return "/community/freecommunity/community_main";		
 	}
+	
+	
+	
+	@PostMapping("/community")
+	public String freecommunity_post(@Valid ArticleDTO articleDTO, HttpServletRequest request) {
+		
+		try {
+
+			HttpSession session = request.getSession();
+			UserDTO userDTO = loginUserDao.select((String)session.getAttribute("id"));
+			
+	        if (userDTO == null) {
+	            // 로그인되어 있지 않은 경우에 대한 예외처리
+	            throw new RuntimeException("로그인이 필요합니다.");
+	        }
+			articleDTO.setUser_no(userDTO.getUser_no());
+			communityService.write(articleDTO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "redirect:/community";
+	}
+	
+	
+	
 	
 
 	//community 글 자세히보기

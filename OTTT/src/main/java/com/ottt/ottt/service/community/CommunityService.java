@@ -7,7 +7,7 @@ import com.ottt.ottt.dto.ArticleDTO;
 public interface CommunityService {
 	
 	//service는 메서드의 이름을 dao와 dto와는 다른느낌
-	List<ArticleDTO> showAllPage(ArticleDTO articleDTO) throws Exception;
+	List<ArticleDTO> showAllPage() throws Exception;
 	
 	ArticleDTO read(Integer article_no) throws Exception;
 	

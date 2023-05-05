@@ -25,8 +25,8 @@
 
 
 	<insert id="insert" parameterType="ArticleDTO">
-		INSERT INTO tb_article (article_content, article_image, user_no )
-		VALUES(#{article_content},#{article_image} ,#{user_no})
+		INSERT INTO tb_article (article_content, article_image, user_no ,article_create_dt, article_index_no)
+		VALUES(#{article_content},#{article_image} ,#{user_no},now(),'1')
 	</insert>
 	
 	
@@ -45,7 +45,6 @@
 		SET article_content=#{article_content}, article_image=#{article_image}, article_mod_dt=now()
 		WHERE article_no=#{article_no}, user_no=#{user_no}
 	</update>
-
 
 
 

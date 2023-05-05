@@ -39,7 +39,7 @@ public class CommunityServiceImpl implements CommunityService{
 	}
 
 	@Override
-	public List<ArticleDTO> showAllPage(ArticleDTO articleDTO) throws Exception {
+	public List<ArticleDTO> showAllPage() throws Exception {
 		return communityDao.selectAll();
 	}
 

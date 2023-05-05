@@ -101,13 +101,13 @@
 			function frmCheck(frm) {
 				let msg = ''
 				
-				if (frm.id.value.length == 0){
-					setMessage("id를 입력해주세요", frm.id)
+				if (frm.user_id.value.length == 0){
+					setMessage("id를 입력해주세요", frm.user_id)
 					return false;
 				}
 				
-				if (frm.pwd.value.length == 0){
-					setMessage("비밀번호를 입력해주세요", frm.pwd)
+				if (frm.user_pwd.value.length == 0){
+					setMessage("비밀번호를 입력해주세요", frm.user_pwd)
 					return false;
 				}
 				
